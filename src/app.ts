@@ -1,8 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cookieSession from 'cookie-session';
 import authRouter from './routes/auth_routes';
-import errorHandler from './middleware/error-handler';
-import { CommonError } from './errors';
+import { errorHandler, NotFoundError } from '@sgticketing/common';
 
 const app = express();
 
@@ -15,7 +14,7 @@ app.use(cookieSession({ signed: false, secure: process.env.NODE_ENV !== 'test' }
 app.use('/api/users', authRouter);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
-  next(new CommonError('Not Found', 404));
+  next(new NotFoundError('Not Found'));
 });
 
 app.use(errorHandler);

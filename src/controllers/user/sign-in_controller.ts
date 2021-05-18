@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
+import { NotAuthorizedError } from '@sgticketing/common';
 import User from '../../models/user_model';
-import { CommonError } from '../../errors';
 import { catchAsync, JWTToken, Password, ResponseMessageType } from '../../utils';
 
 /**
@@ -21,11 +21,11 @@ export const signInHandler = catchAsync(async (req: Request, res: Response, next
   // check for existing user
   const existingUser = await User.findOne({ email });
   // Failed to find user check
-  if (!existingUser) return next(new CommonError('Invalid credentials', 401));
+  if (!existingUser) return next(new NotAuthorizedError('Invalid credentials'));
   // Compare the password provided
   const passwordsMatch = await Password.compare(existingUser?.password, password);
   // Invalid password check
-  if (!passwordsMatch) return next(new CommonError('Invalid credentials', 401));
+  if (!passwordsMatch) return next(new NotAuthorizedError('Invalid credentials'));
   // Create JWT and send a cookie
   req.session = {
     jwt: JWTToken.createToken({ id: existingUser.id }),
