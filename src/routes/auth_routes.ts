@@ -1,8 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { currentUser, validateRequest } from '@sgticketing/common';
+import { validateRequest } from '@sgticketing/common';
 import { body } from 'express-validator';
 import authController from '../controllers/user';
 import { ResponseMessageType } from '../utils';
+import { currentUser } from '../middleware/currentuser';
 
 const router = Router();
 
