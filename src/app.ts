@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cookieSession from 'cookie-session';
+import 'express-async-errors';
 import authRouter from './routes/auth_routes';
 import { errorHandler, NotFoundError } from '@sgticketing/common';
 
