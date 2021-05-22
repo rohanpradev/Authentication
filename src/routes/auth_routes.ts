@@ -1,23 +1,18 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { validateRequest } from '@sgticketing/common';
+import { validateRequest, currentUser } from '@grider-courses/common';
 import { body } from 'express-validator';
 import authController from '../controllers/user';
 import { ResponseMessageType } from '../utils';
-import { currentUser } from '../middleware/currentuser';
 
 const router = Router();
 
-router.get(
-  '/currentuser',
-  currentUser(process.env.JWT_KEY!),
-  (req: Request, res: Response, next: NextFunction) => {
-    const currentUser = req.currentUser || null;
-    res.send({
-      status: currentUser ? ResponseMessageType.SUCCESS : ResponseMessageType.FAIL,
-      data: { currentUser },
-    });
-  }
-);
+router.get('/currentuser', currentUser, (req: Request, res: Response, next: NextFunction) => {
+  const currentUser = req.currentUser || null;
+  res.send({
+    status: currentUser ? ResponseMessageType.SUCCESS : ResponseMessageType.FAIL,
+    data: { currentUser },
+  });
+});
 
 router.post(
   '/signin',

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { NotAuthorizedError } from '@sgticketing/common';
+import { NotAuthorizedError } from '@grider-courses/common';
 import User from '../../models/user_model';
 import { catchAsync, JWTToken, Password, ResponseMessageType } from '../../utils';
 
@@ -21,11 +21,11 @@ export const signInHandler = catchAsync(async (req: Request, res: Response, next
   // check for existing user
   const existingUser = await User.findOne({ email });
   // Failed to find user check
-  if (!existingUser) return next(new NotAuthorizedError('Invalid credentials'));
+  if (!existingUser) return next(new NotAuthorizedError());
   // Compare the password provided
   const passwordsMatch = await Password.compare(existingUser?.password, password);
   // Invalid password check
-  if (!passwordsMatch) return next(new NotAuthorizedError('Invalid credentials'));
+  if (!passwordsMatch) return next(new NotAuthorizedError());
   // Create JWT and send a cookie
   req.session = {
     jwt: JWTToken.createToken({ id: existingUser.id }),

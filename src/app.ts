@@ -1,8 +1,9 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import cookieSession from 'cookie-session';
 import 'express-async-errors';
 import authRouter from './routes/auth_routes';
-import { errorHandler, NotFoundError } from '@sgticketing/common';
+import middleware from './middleware';
+import { errorHandler } from '@grider-courses/common';
 
 const app = express();
 
@@ -14,9 +15,7 @@ app.use(cookieSession({ signed: false, secure: process.env.NODE_ENV !== 'test' }
 
 app.use('/api/users', authRouter);
 
-app.all('*', (req: Request, res: Response, next: NextFunction) => {
-  next(new NotFoundError('Not Found'));
-});
+app.all('*', middleware.notFoundHandler);
 
 app.use(errorHandler);
 
